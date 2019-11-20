@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [[ "$#" -lt 1 ]]
+then
+	echo 'Usage: tarsum md5|sha1|sha224|sha256|sha384|sha512|b2 [TAR OPTIONS...]' >&2
+	exit 1
+fi
+
+CMD="${1}sum -b"
+shift
+
+exec tar -x --to-command 'if [[ "$TAR_FILETYPE" == f ]]; then sum="$('"$CMD"')"; echo "${sum%-}${TAR_FILENAME}"; fi' "$@"
